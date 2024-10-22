@@ -76,12 +76,12 @@ export default function NetflixCard({
           </div>
           <div
             className='group/leftBtn realtive absolute opacity-0 group-hover/tile:opacity-100 translate-x-12 group-hover/tile:translate-x-0 right-5 bottom-4 duration-500 transition-all ease-in-out rounded-full ring-1 ring-white ring-opacity-15 hover:scale-110 cursor-pointer'
-            onClick={() => router.push(`/projects/cinezone/${movie?.id}`)}
+            onClick={() => router.push(`/${movie?.id}`)}
           >
-            <div className='flex justify-center items-center w-12 h-12 bg-black group-hover/leftBtn:bg-gray-50 group-hover/leftBtn:text-gray-700 rounded-full bg-opacity-50 text-gray-50 font-bold text-xl cursor-pointer group-hover/leftBtn:shadow-lg transition-all ease-in-out'>
+            <div className='flex justify-center items-center w-8 h-8 bg-black group-hover/leftBtn:bg-gray-50 group-hover/leftBtn:text-gray-700 rounded-full bg-opacity-50 text-gray-50 font-bold text-xl cursor-pointer group-hover/leftBtn:shadow-lg transition-all ease-in-out'>
               i
             </div>
-            <div className='absolute top-0 right-0 h-12 group-hover/leftBtn:pr-14 px-4 opacity-0 group-hover/leftBtn:opacity-100 text-base flex items-center bg-white/40 ring-1 ring-white rounded-full delay-300 transition-all ease-in-out'>{`Details`}</div>
+            <div className='absolute top-0 right-0 h-8 group-hover/leftBtn:pr-10 px-4 opacity-0 group-hover/leftBtn:opacity-100 text-sm flex items-center bg-white/40 ring-1 ring-white rounded-full delay-300 transition-all ease-in-out'>{`Details`}</div>
           </div>
         </div>
       </div>
