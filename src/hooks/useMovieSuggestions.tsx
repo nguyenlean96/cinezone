@@ -1,9 +1,13 @@
 import useSWRInfinite from 'swr/infinite';
-import { useState, useEffect } from 'react';
 
-const fetcher = async (url: string) => await fetch(url).then((res) => res.json());
+import { useState, useEffect } from 'react';
+import { fetcher } from '@/utils';
+
 const PAGE_SIZE = 5;
 
+/**
+ * A custom suggester hook for movies using genres
+ */
 export default function useMovieSuggestions({ genres }: { genres: string[]}) {
   const [pageIndex, setPageIndex] = useState(1);
 	const [firstItemId, setFirstItemId] = useState<string | null>(null);
@@ -12,7 +16,7 @@ export default function useMovieSuggestions({ genres }: { genres: string[]}) {
 		(index, previousPageData) => {
 			if (index && !previousPageData.length) return null;
 			
-      return `https://yts.mx/api/v2/list_movies.json?${encodeURIComponent(genres.map((genre) => `genre=${genre}`).join('&'))}&limit=${PAGE_SIZE}&page=${pageIndex}`;
+      return `${process.env.NEXT_PUBLIC_LIST_MOVIES}?${encodeURIComponent(genres.map((genre) => `genre=${genre}`).join('&'))}&limit=${PAGE_SIZE}&page=${pageIndex}`;
 		},
 		fetcher
 	);

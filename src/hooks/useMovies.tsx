@@ -1,48 +1,22 @@
 import useSWRInfinite from 'swr/infinite';
 import { useState, useEffect } from 'react';
 import { useDebouncedCallback } from '@mantine/hooks';
-import crypto from 'crypto';
-import {
-	collection,
-	query,
-	getDocs,
-	addDoc,
-	where,
-} from 'firebase/firestore';
-import { db } from '@/context/firebase';
+import { backup_movie_list } from '@/hooks/useFirebase';
+import { fetcher } from '@/utils';
 
-const fetcher = async (url: string) => await fetch(url).then((res) => res.json());
 const PAGE_SIZE = 5;
-
-const uploadData = async (data: any) => {
-	console.log('Uploading data', data?.title);
-	const q = query(collection(db, 'movies-list'), where('id', '==', data?.id));
-	const querySnapshot = await getDocs(q);
-	if (querySnapshot.empty) {
-		await addDoc(collection(db, 'movies-list'), {
-			...data,
-			created_at: new Date(),
-		});
-		console.log('Data added', data?.title);
-	} else {
-		console.log('Data already exists', data?.title, 'Synced on', data?.created_at);
-	}
-	return data;
-};
-
-const stringHashing = (str: string) => {
-	return crypto.createHash('base64').update(str).digest('hex');
-};
 
 export default function useMovies({ genre }: { genre: string }) {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [pageIndex, setPageIndex] = useState(1);
 	const [firstItemId, setFirstItemId] = useState<string | null>(null);
 	const [moviesData, setMoviesData] = useState<any[]>([]);
+
+
 	const { data, mutate, isValidating, isLoading } = useSWRInfinite(
 		(index, previousPageData) => {
 			if (index && !previousPageData.length) return null;
-			return `https://yts.mx/api/v2/list_movies.json?genre=${encodeURIComponent(
+			return `${process.env.NEXT_PUBLIC_LIST_MOVIES}?genre=${encodeURIComponent(
 				genre
 			)}&limit=${PAGE_SIZE}&page=${pageIndex}${searchTerm && searchTerm.length > 0 ? '&query_term=' + searchTerm : ''
 				}`;
@@ -57,21 +31,10 @@ export default function useMovies({ genre }: { genre: string }) {
 
 	const loadMore = () => setPageIndex((prev) => prev + 1);
 
-	const createGenre = async (genre: string) => {
-		const q = query(collection(db, 'movie-genres'), where('name', '==', genre));
-		const querySnapshot = await getDocs(q);
-		if (querySnapshot.empty) {
-			await addDoc(collection(db, 'movie-genres'), {
-				name: genre,
-				created_at: new Date(),
-			});
-		}
-	};
-
 	const backupData = async () => {
 		if (movies && movies.length > 0) {
 			for (let i = 0; i < movies.length; i++) {
-				await uploadData(movies[i]);
+				await backup_movie_list(movies[i]);
 			}
 		} else console.log('No data to upload');
 	};
@@ -117,7 +80,6 @@ export default function useMovies({ genre }: { genre: string }) {
 	}, []);
 
 	return {
-		createGenre,
 		moviesList: moviesData,
 		firstItemId,
 		pageSize: PAGE_SIZE,
