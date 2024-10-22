@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { motion as m } from 'framer-motion';
 import { useDebouncedCallback } from '@mantine/hooks';
 import { MoviesGroupedByGenres } from '@/components/index-page/by-genres';
-
+import { get_genres } from '@/hooks/useFirebase';
 import localFont from "next/font/local";
 
 const geistSans = localFont({
@@ -17,14 +16,26 @@ const geistMono = localFont({
 });
 
 export default function Home(props: any) {
-  const { width, height } = props;
-  const [genres, setGenres] = useState([]);
-	const [searchTermDisp, setSearchTermDisp] = useState('');
-	const [userSearchTerm, setUserSearchTerm] = useState('');
+  const { width, height }: {
+    width: number;
+    height: number;
+  } = props;
+  const [genres, setGenres] = useState<any[]>([]);
+  const [searchTermDisp, setSearchTermDisp] = useState<string>('');
+  const [userSearchTerm, setUserSearchTerm] = useState<string>('');
+
+  const [isUploadingData, setIsUploadingData] = useState<boolean>(false);
 
   const applyUserSearchTerm = useDebouncedCallback((term: string) => {
-		setUserSearchTerm(term);
-	}, 700);
+    setUserSearchTerm(term);
+  }, 700);
+
+  useEffect(() => {
+		(async () => {
+			const genres = await get_genres();
+			setGenres(Array.from(genres));
+		})()
+	}, []);
 
   return (
     <div className='relative w-screen h-screen overflow-hidden pt-[3em] xl:pt-[4em] pb-24 bg-gradient-to-br from-gray-900 via-zinc-900/90 to-slate-900/95'>

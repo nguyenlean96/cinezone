@@ -1,4 +1,4 @@
-import { motion as m } from 'framer-motion';
+import { motion } from 'framer-motion';
 import NetflixCard from '@/components/movie-card/netflix';
 
 const HorizontalList = ({
@@ -37,7 +37,7 @@ const HorizontalList = ({
 						{moviesList &&
 							moviesList.length > 0 &&
 							moviesList.map((m: any, i: number) => (
-								<m.div className='hover:z-10'
+								<motion.div className='hover:z-10'
 									key={i}
 									initial={{
 										opacity: 0,
@@ -58,7 +58,7 @@ const HorizontalList = ({
 										height={width > 1280 ? height / 4 : height / 7}
 										isSynced={m?.synced_at ? true : false}
 									/>
-								</m.div>
+								</motion.div>
 							))}
 					</div>
 
