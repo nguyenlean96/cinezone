@@ -1,8 +1,10 @@
+import dynamic from 'next/dynamic'
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { get_remote_data, } from '@/hooks/useFirebase';
-
+import NavButton from '@/components/nav-button';
 // import ChatGPTLoading from '@/components/Layouts/chatGPTLoading';
 import { HorizontalList } from '@/components/index-page/horizontal-list';
 import useMovieSuggestions from '@/hooks/useMovieSuggestions';
@@ -80,20 +82,18 @@ export default function MovieDetails({ width, height, ...props }:
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
-    <div className='relative w-full h-full min-h-screen bg-gradient-to-b from-gray-900 via-zinc-800 to-slate-800'>
-
+    <div className='relative w-screen overflow-x-hidden h-full min-h-screen bg-gradient-to-b from-gray-900 via-zinc-800 to-slate-800'>
+      <NavButton />
       {/* {isLoading && <ChatGPTLoading />} */}
       <div className='absolute top-0 left-0 w-full h-full'>
-        {
-          movie &&
-          <iframe
-            src={`https://www.youtube.com/embed/${movie?.yt_trailer_code}`}
-            className='w-full h-full'
-            width={width * (width > 1280 ? 1.6 : 1.8)}
-            height={height * (width > 1280 ? 1.6 : 1.8)}
-            allow='autoplay; encrypted-media; picture-in-picture'
-          />
-        }
+        <ReactPlayer
+          url={`https://www.youtube.com/embed/${movie?.yt_trailer_code}`}
+          playing={true}
+          muted={true}
+          // Make it stretch to the full width and height
+          width={width}
+          height={height}
+        />
       </div>
       {!isPlaying && (
         <div className='relative w-full h-full min-h-screen bg-gradient-to-t lg:bg-gradient-to-r from-zinc-900 via-gray-900/60 to-white/0'>
