@@ -2,18 +2,6 @@ import { useState, useEffect } from 'react';
 import { useDebouncedCallback } from '@mantine/hooks';
 import { MoviesGroupedByGenres } from '@/components/index-page/by-genres';
 import { get_genres } from '@/hooks/useFirebase';
-import localFont from "next/font/local";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export default function Home(props: any) {
   const { width, height }: {
@@ -23,8 +11,6 @@ export default function Home(props: any) {
   const [genres, setGenres] = useState<any[]>([]);
   const [searchTermDisp, setSearchTermDisp] = useState<string>('');
   const [userSearchTerm, setUserSearchTerm] = useState<string>('');
-
-  const [isUploadingData, setIsUploadingData] = useState<boolean>(false);
 
   const applyUserSearchTerm = useDebouncedCallback((term: string) => {
     setUserSearchTerm(term);
@@ -39,8 +25,7 @@ export default function Home(props: any) {
 
   return (
     <div className='relative w-screen h-screen overflow-hidden pt-[3em] xl:pt-[4em] pb-24 bg-gradient-to-br from-gray-900 via-zinc-900/90 to-slate-900/95'>
-      <div
-        className='relative flex flex-col justify-start px-2 lg:px-4 lg:pl-16 lg:pr-0.5'
+      <div className='relative flex flex-col justify-start px-2 lg:px-4 lg:pl-16 lg:pr-0.5'
         style={{
           height: height * 0.92,
           width: width,

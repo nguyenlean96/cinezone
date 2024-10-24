@@ -6,6 +6,63 @@ import { fetcher } from '@/utils';
 
 const PAGE_SIZE = 5;
 
+const parameters ={
+	limit: {
+		required: false,
+		type: 'number',
+		default: 20,
+		description: "The limit of results per page that has been set."
+	},
+	page: {
+		required: false,
+		type: 'number',
+		default: 1,
+		description: "Used to see the next page of movies, e.g. limit=15 and page=2 will show you movies 15-30."
+	},
+	quality: {
+		required: false,
+		type: 'string',
+		default: 'All',
+		description: "Used to filter by a given quality."
+	},
+	minimum_rating: {
+		required: false,
+		type: 'number',
+		default: 0,
+		description: "Used to filter movie by a given minimum IMDb rating."
+	},
+	query_term: {
+		required: false,
+		type: 'string',
+		default: null,
+		description: "Used for movie search, matching on: Movie Title/IMDb Code, Actor Name/IMDb Code, Director Name/IMDb Code."
+	},
+	genre: {
+		required: false,
+		type: 'string',
+		default: 'All',
+		description: "Used to filter by a given genre (See http://www.imdb.com/genre/ for full list)."
+	},
+	sort_by: {
+		required: false,
+		type: 'string',
+		default: 'date_added',
+		description: "Sorts the results by choosen value."
+	},
+	order_by: {
+		required: false,
+		type: 'string',
+		default: 'desc',
+		description: "Orders the results by either Ascending or Descending order."
+	},
+	with_rt_ratings: {
+		required: false,
+		type: 'boolean',
+		default: false,
+		description: "When set the data returned will include the Rotten Tomato rating."
+	},
+}
+
 export default function useMovies({ genre }: { genre: string }) {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [pageIndex, setPageIndex] = useState(1);
