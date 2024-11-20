@@ -1,1 +1,7 @@
 /target
+.DS_Store
+**/.DS_Store
+
+# Ignore the database sqlite files
+**/*.sqlite
+database/*.sql
